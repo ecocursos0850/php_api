@@ -36,7 +36,8 @@ class Email extends CI_Controller {
         $mensagem = $data["mensagem"];
     
         // Inicialize a biblioteca MailerSend
-        $mailerSend = new MailerSend(['api_key' => 'mlsn.9023e774d8fbc73e63223fdd4f9369d80f7b8463f0f5ef124aea005d81e7af6c']);
+        //$mailerSend = new MailerSend(['api_key' => 'mlsn.9023e774d8fbc73e63223fdd4f9369d80f7b8463f0f5ef124aea005d81e7af6c']); //oficial
+        $mailerSend = new MailerSend(['api_key' => 'mlsn.73b8de9d6a0704863ff441c8a0f491a2f8dc4e24f0e24b181a916ac2ec78e32b']); //mailersend
     
         // Configurar destinatários e parâmetros de e-mail
         $recipients = [
@@ -44,7 +45,8 @@ class Email extends CI_Controller {
         ];
     
         $emailParams = (new EmailParams())
-            ->setFrom('diretoria@ecocursos.com.br')
+            //->setFrom('diretoria@ecocursos.com.br') //oficial
+            ->setFrom('MS_k7Zj7A@trial-pxkjn41xew0gz781.mlsender.net') // mailersend
             ->setFromName('ECOCURSOS')
             ->setRecipients($recipients)
             ->setSubject($assunto)
