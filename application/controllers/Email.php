@@ -39,7 +39,7 @@ class Email extends CI_Controller {
         $novaSenha = $data["novaSenha"];
     
         // Inicialize a biblioteca MailerSend
-        $mailerSend = new MailerSend(['api_key' => 'mlsn.37bf59de3d901608d0193503effb3d311adad7ac6d6dc8e6fd4e8e552dca9420']); //oficial
+        $mailerSend = new MailerSend(['api_key' => '']); //oficial
     
         // Configurar destinatários e parâmetros de e-mail
         $recipients = [
@@ -65,7 +65,8 @@ class Email extends CI_Controller {
             'destinatario' => "angelolefundes@yahoo.com.br",
             'assunto' => "Redefinição de senha[TESTE]",
             'nome' => "Angelo Lefundes", // Adicione a variável senha
-            'senha' => "qwerty" // Adicione a variável senha
+            'senha' => "qwerty", // Adicione a variável senha
+            'copy' => date("Y") // Adicione a variável senha
         ];
 
         // Renderize a view e capture o conteúdo como string
@@ -98,7 +99,7 @@ class Email extends CI_Controller {
             ->setFrom('diretoria@ecocursos.com.br') //oficial
             ->setFromName('ECOCURSOS')
             ->setRecipients($recipients)
-            ->setSubject($assunto)
+            ->setSubject($dados["assunto"])
             ->setHtml($mensagem_html)
             ->setText(strip_tags($mensagem_html)); // Usar texto simples sem HTML
     

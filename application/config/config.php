@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 // Carregue o arquivo .env
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv\Dotenv::create("/var/www/html/php_api");
 $dotenv->load();
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ $dotenv->load();
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://srv448021.hstgr.cloud/enviar_email';
+$config['base_url'] = 'https://srv448021.hstgr.cloud/php_api';
 
 /*
 |--------------------------------------------------------------------------
