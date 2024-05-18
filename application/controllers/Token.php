@@ -97,10 +97,14 @@ class Token extends CI_Controller {
                     file_put_contents('/home/rdpuser/projects/token/loja/src/environments/environment.prod.ts', $new_file_content);
 
                     // Token de acesso pessoal
-                    $api_key = "";
-                    
+                    $api_key = getenv('GITHUB_API_KEY'); // Use a variável de ambiente para a API key
+                    if (!$api_key) {
+                        http_response_code(500); // Internal Server Error
+                        echo "Erro: a chave da API não está configurada.";
+                        return;
+                    }
                     // URL do repositório com token de acesso pessoal incorporado
-                    $repository_url = "";
+                    $repository_url = "https://$api_key@github.com/ecocursos0850/loja.git";
                     
                     // Configuração do nome de usuário
                     $username = "ecocursos";
