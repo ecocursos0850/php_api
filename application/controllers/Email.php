@@ -11,8 +11,9 @@ use MailerSend\Helpers\Builder\EmailParams;
 
 class Email extends CI_Controller {
 
-    public function __construct() {
+	public function __construct(){
         parent::__construct();
+		$this->load->library('twig');
     }
 
     public function send() {
@@ -34,10 +35,10 @@ class Email extends CI_Controller {
         $destinatario = $data["destinatario"]; 
         $assunto = $data["assunto"]; 
         $mensagem = $data["mensagem"];
+        $novaSenha = $data["novaSenha"];
     
         // Inicialize a biblioteca MailerSend
         $mailerSend = new MailerSend(['api_key' => 'mlsn.37bf59de3d901608d0193503effb3d311adad7ac6d6dc8e6fd4e8e552dca9420']); //oficial
-        //$mailerSend = new MailerSend(['api_key' => 'mlsn.73b8de9d6a0704863ff441c8a0f491a2f8dc4e24f0e24b181a916ac2ec78e32b']); //mailersend
     
         // Configurar destinatários e parâmetros de e-mail
         $recipients = [
@@ -56,23 +57,22 @@ class Email extends CI_Controller {
         $mailerSend->email->send($emailParams);
     }
     // Teste de envio de email
-    public function sendTeste() {
+    public function sendTest() {
         
         // Extraia os dados do array associativo
         $destinatario = "angelolefundes@yahoo.com.br";
         $assunto = "Redefinição de senha[TESTE]";
-        
-        $mensagem_html = $this->load->view('email/resetPassword');
-    
-        // Carregar a view e capturar o conteúdo como uma string
-        $data_view = array(
-            'destinatario' => $destinatario,
-            'assunto' => $assunto,
-            'mensagem' => $mensagem_html
-        );
-    
+        $dados["nome"] = "Ângelo Lefundes";
+        $dados["email"] = "angelolefundes@yahoo.com.br";
+        $dados["senha"] = "qwerty";
+
+        $dados["base_url"] = base_url();
+
+        $dados['funcoes_diversas'] = $this->funcoes_diversas;
+		$mensagem_html = $this->twig->display('email/resetPassword', $dados, true);
+
         // Inicialize a biblioteca MailerSend
-        $mailerSend = new MailerSend(['api_key' => '']); //oficial
+        $mailerSend = new MailerSend(['api_key' => 'mlsn.37bf59de3d901608d0193503effb3d311adad7ac6d6dc8e6fd4e8e552dca9420']); //oficial
     
         // Configurar destinatários e parâmetros de e-mail
         $recipients = [
