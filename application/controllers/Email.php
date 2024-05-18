@@ -35,9 +35,9 @@ class Email extends CI_Controller {
         // Dados para a view
         $dados = [
             'destinatario' => $data["destinatario"],
-            'assunto' => "Redefinição de senha[TESTE]",
-            'nome' => $data["destinatario"], // Adicione a variável senha
-            'senha' => $data["novaSenha"], // Adicione a variável senha
+            'assunto' => "Redefinição de senha",
+            'nome' => $data["nome"], // Adicione a variável senha
+            'senha' => $data["senha"], // Adicione a variável senha
             'copy' => date("Y") // Adicione a variável senha
         ];
 
