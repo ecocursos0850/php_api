@@ -66,7 +66,6 @@ class Email extends CI_Controller {
         $dados["email"] = "angelolefundes@yahoo.com.br";
         $dados["senha"] = "qwerty";
 
-        $dados['funcoes_diversas'] = $this->funcoes_diversas;
 		$mensagem_html = $this->twig->display('email/resetPassword', $dados, true);
 
         // Inicialize a biblioteca MailerSend
