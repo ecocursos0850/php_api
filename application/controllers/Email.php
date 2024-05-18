@@ -62,7 +62,7 @@ class Email extends CI_Controller {
         $destinatario = "angelolefundes@yahoo.com.br";
         $assunto = "Redefinição de senha[TESTE]";
         
-        $mensagem_html = $this->load->view('email/resetPassword', $data_view, true);
+        $mensagem_html = $this->load->view('email/resetPassword');
     
         // Carregar a view e capturar o conteúdo como uma string
         $data_view = array(
