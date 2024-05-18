@@ -55,5 +55,40 @@ class Email extends CI_Controller {
         // Enviar e-mail usando a biblioteca MailerSend
         $mailerSend->email->send($emailParams);
     }
+    // Teste de envio de email
+    public function sendTeste() {
+        
+        // Extraia os dados do array associativo
+        $destinatario = "angelolefundes@yahoo.com.br";
+        $assunto = "Redefinição de senha[TESTE]";
+        //$mensagem = $data["mensagem"];
     
+        // Carregar a view e capturar o conteúdo como uma string
+        $data_view = array(
+            'destinatario' => $destinatario,
+            'assunto' => $assunto,
+            'mensagem' => $mensagem
+        );
+        $mensagem_html = $this->load->view('email/resetPassword', $data_view, true);
+    
+        // Inicialize a biblioteca MailerSend
+        $mailerSend = new MailerSend(['api_key' => '']); //oficial
+    
+        // Configurar destinatários e parâmetros de e-mail
+        $recipients = [
+            new Recipient($destinatario, $destinatario),
+        ];
+    
+        $emailParams = (new EmailParams())
+            ->setFrom('diretoria@ecocursos.com.br') //oficial
+            ->setFromName('ECOCURSOS')
+            ->setRecipients($recipients)
+            ->setSubject($assunto)
+            ->setHtml($mensagem_html)
+            ->setText(strip_tags($mensagem_html)); // Usar texto simples sem HTML
+    
+        // Enviar e-mail usando a biblioteca MailerSend
+        $mailerSend->email->send($emailParams);
+    }
+        
 }
