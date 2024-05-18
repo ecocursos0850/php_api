@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // Carregue a biblioteca DotEnv
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 // Carregue o arquivo .env
 $dotenv = Dotenv\Dotenv::create("/var/www/html/php_api");
