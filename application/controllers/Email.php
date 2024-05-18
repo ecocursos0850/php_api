@@ -61,15 +61,15 @@ class Email extends CI_Controller {
         // Extraia os dados do array associativo
         $destinatario = "angelolefundes@yahoo.com.br";
         $assunto = "Redefinição de senha[TESTE]";
-        //$mensagem = $data["mensagem"];
+        
+        $mensagem_html = $this->load->view('email/resetPassword', $data_view, true);
     
         // Carregar a view e capturar o conteúdo como uma string
         $data_view = array(
             'destinatario' => $destinatario,
             'assunto' => $assunto,
-            'mensagem' => $mensagem
+            'mensagem' => $mensagem_html
         );
-        $mensagem_html = $this->load->view('email/resetPassword', $data_view, true);
     
         // Inicialize a biblioteca MailerSend
         $mailerSend = new MailerSend(['api_key' => '']); //oficial
