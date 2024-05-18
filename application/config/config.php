@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+// Carregue a biblioteca DotEnv
+require_once(__DIR__ . '/../vendor/autoload.php');
 
+// Carregue o arquivo .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

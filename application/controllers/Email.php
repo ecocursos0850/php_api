@@ -7,7 +7,8 @@ use MailerSend\MailerSend;
 use MailerSend\Helpers\Builder\Recipient;
 use MailerSend\Helpers\Builder\EmailParams;
 
-//require_once APPPATH . 'vendor/autoload.php'; // Caminho para o autoload.php
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment;
 
 class Email extends CI_Controller {
 
@@ -59,21 +60,38 @@ class Email extends CI_Controller {
     // Teste de envio de email
     public function sendTest() {
         
-        // Extraia os dados do array associativo
-        $destinatario = "angelolefundes@yahoo.com.br";
-        $assunto = "Redefinição de senha[TESTE]";
-        $dados["nome"] = "Ângelo Lefundes";
-        $dados["email"] = "angelolefundes@yahoo.com.br";
-        $dados["senha"] = "qwerty";
+        // Dados para a view
+        $dados = [
+            'destinatario' => "angelolefundes@yahoo.com.br",
+            'assunto' => "Redefinição de senha[TESTE]",
+            'nome' => "Angelo Lefundes", // Adicione a variável senha
+            'senha' => "qwerty" // Adicione a variável senha
+        ];
 
-		$mensagem_html = $this->twig->display('email/resetPassword', $dados, true);
+        // Renderize a view e capture o conteúdo como string
+        try {
+            $mensagem_html = $this->twig->render('email/resetPassword.twig', $dados);
+        } catch (Exception $e) {
+            log_message('error', 'Erro ao renderizar o template: ' . $e->getMessage());
+            show_error('Erro ao renderizar o template: ' . $e->getMessage(), 500);
+            return;
+        }
 
         // Inicialize a biblioteca MailerSend
-        $mailerSend = new MailerSend(['api_key' => 'mlsn.37bf59de3d901608d0193503effb3d311adad7ac6d6dc8e6fd4e8e552dca9420']); //oficial
+        $api_key = getenv('MAILERSEND_API_KEY'); // Use a variável de ambiente para a API key
+        if (!$api_key) {
+            http_response_code(500); // Internal Server Error
+            echo "Erro: a chave da API não está configurada.";
+            return;
+        }
+
+
+        // Inicialize a biblioteca MailerSend
+        $mailerSend = new MailerSend(['api_key' => $api_key]); //oficial
     
         // Configurar destinatários e parâmetros de e-mail
         $recipients = [
-            new Recipient($destinatario, $destinatario),
+            new Recipient($dados['destinatario'], $dados['destinatario']),
         ];
     
         $emailParams = (new EmailParams())
