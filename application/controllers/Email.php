@@ -251,20 +251,7 @@ class Email extends CI_Controller {
     }
 
     public function happyBirthdayTest() {
-        // Obtenha o corpo da requisição POST enviado como JSON
-        $json_data = file_get_contents('php://input');
-    
-        // Decodifique os dados JSON para um array associativo
-        $data = json_decode($json_data, true);
-    
-        // Verifique se os dados foram decodificados corretamente
-        if ($data === null) {
-            // Se não foi possível decodificar os dados JSON, retorne um erro
-            http_response_code(400); // Bad Request
-            echo "Erro: os dados JSON estão malformados.";
-            return;
-        }
-    
+           
         // Dados para a view
         $dados = [
             'destinatario' => "angelolefundes@yahoo.com.br",
