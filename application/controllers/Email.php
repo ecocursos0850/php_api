@@ -166,7 +166,7 @@ class Email extends CI_Controller {
         );
     
         // Inserindo os dados na tabela
-        $result = $this->Cupom_desconto->save($data);
+        $result = $this->Cupom_model->save($data);
     
         // Verificando se a inserção foi bem-sucedida
         if ($result["lines"] > 0) {
