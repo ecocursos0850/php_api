@@ -45,9 +45,9 @@ class Cupom_model extends CI_Model {
         
         // Verificar se existe um cupom para o aluno na data atual
         $this->db->where('aluno_id', $aluno_id);
-        $this->db->where('YEAR(data_nascimento)', date('Y'));
-        $this->db->where('MONTH(data_nascimento)', date('m'));
-        $this->db->where('DAY(data_nascimento)', date('d'));
+        $this->db->where('YEAR(data_cadastro)', date('Y'));
+        $this->db->where('MONTH(data_cadastro)', date('m'));
+        $this->db->where('DAY(data_cadastro)', date('d'));
         $query = $this->db->get('cupom_desconto');
         
         return $query->num_rows() > 0;
