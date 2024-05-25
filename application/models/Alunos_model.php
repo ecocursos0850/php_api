@@ -11,7 +11,7 @@ class Alunos_model extends CI_Model {
     function listHappyBirthday()
     {
         // Monta a consulta
-        $this->db->select("email, nome");
+        $this->db->select("id, nome, email");
         $this->db->from($this->table);
         $this->db->where('MONTH(data_nascimento)', date('m'));
         $this->db->where('DAY(data_nascimento)', date('d'));

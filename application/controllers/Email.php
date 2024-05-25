@@ -19,6 +19,7 @@ class Email extends CI_Controller {
 		$this->load->model('Alunos_model');
     }
 
+    // Produção
     public function resetPassword() {
         // Obtenha o corpo da requisição POST enviado como JSON
         $json_data = file_get_contents('php://input');
@@ -84,58 +85,65 @@ class Email extends CI_Controller {
         // Seleciona todos os aniversariantes do mês
         $alunosAniversariantes = $this->Alunos_model->listHappyBirthday();
         
-        // Para cada aluno aniversariante, gere um cupom e envie um e-mail
+        // Para cada aluno aniversariante, verificar se já existe um cupom para hoje
         foreach ($alunosAniversariantes as $aluno) {
-            // Gerar cupom
-            $presente = $this->generateCupom();
-    
-            // Dados para a view
-            $dados = [
-                'destinatario' => $aluno->email,
-                'assunto' => 'Feliz Aniversário!',
-                'nome' => $aluno->nome,
-                'presente' => $presente,
-                'copy' => date("Y")
-            ];
-    
-            // Renderize a view e capture o conteúdo como string
-            try {
-                $mensagem_html = $this->twig->render('email/happyBirthday.twig', $dados);
-            } catch (Exception $e) {
-                log_message('error', 'Erro ao renderizar o template: ' . $e->getMessage());
-                show_error('Erro ao renderizar o template: ' . $e->getMessage(), 500);
-                return;
+            // Verificar se já existe um cupom para o aluno e a data atual
+            $cupomExistente = $this->Cupom_model->checkExistingCupom($aluno->id);
+            
+            // Se não existir um cupom para o aluno hoje, gerar um novo
+            if (!$cupomExistente) {
+                // Gerar cupom
+                $presente = $this->generateCupom($aluno->id);
+        
+                // Dados para a view
+                $dados = [
+                    'destinatario' => $aluno->email,
+                    'assunto' => 'Feliz Aniversário!',
+                    'nome' => $aluno->nome,
+                    'presente' => $presente,
+                    'copy' => date("Y")
+                ];
+        
+                // Renderize a view e capture o conteúdo como string
+                try {
+                    $mensagem_html = $this->twig->render('email/happyBirthday.twig', $dados);
+                } catch (Exception $e) {
+                    log_message('error', 'Erro ao renderizar o template: ' . $e->getMessage());
+                    show_error('Erro ao renderizar o template: ' . $e->getMessage(), 500);
+                    return;
+                }
+        
+                // Inicialize a biblioteca MailerSend
+                $api_key = getenv('MAILERSEND_API_KEY'); // Use a variável de ambiente para a API key
+                if (!$api_key) {
+                    http_response_code(500); // Internal Server Error
+                    echo "Erro: a chave da API não está configurada.";
+                    return;
+                }
+        
+                // Inicialize a biblioteca MailerSend
+                $mailerSend = new MailerSend(['api_key' => $api_key]);
+        
+                // Configurar destinatários e parâmetros de e-mail
+                $recipients = [
+                    new Recipient($dados['destinatario'], $dados['destinatario']),
+                ];
+        
+                $emailParams = (new EmailParams())
+                    ->setFrom('diretoria@ecocursos.com.br')
+                    ->setFromName('ECOCURSOS')
+                    ->setRecipients($recipients)
+                    ->setSubject($dados["assunto"])
+                    ->setHtml($mensagem_html);
+        
+                // Enviar e-mail usando a biblioteca MailerSend
+                $mailerSend->email->send($emailParams);
             }
-    
-            // Inicialize a biblioteca MailerSend
-            $api_key = getenv('MAILERSEND_API_KEY'); // Use a variável de ambiente para a API key
-            if (!$api_key) {
-                http_response_code(500); // Internal Server Error
-                echo "Erro: a chave da API não está configurada.";
-                return;
-            }
-    
-            // Inicialize a biblioteca MailerSend
-            $mailerSend = new MailerSend(['api_key' => $api_key]);
-    
-            // Configurar destinatários e parâmetros de e-mail
-            $recipients = [
-                new Recipient($dados['destinatario'], $dados['destinatario']),
-            ];
-    
-            $emailParams = (new EmailParams())
-                ->setFrom('diretoria@ecocursos.com.br')
-                ->setFromName('ECOCURSOS')
-                ->setRecipients($recipients)
-                ->setSubject($dados["assunto"])
-                ->setHtml($mensagem_html);
-    
-            // Enviar e-mail usando a biblioteca MailerSend
-            $mailerSend->email->send($emailParams);
         }
     }
     
-    private function generateCupom(){
+    
+    private function generateCupom($aluno_id = null){
         // Gerando um código de cupom aleatório
         $codigo_cupom = substr(md5(uniqid(mt_rand(), true)), 0, 8);
     
@@ -162,7 +170,8 @@ class Email extends CI_Controller {
             'status' => $status,
             'titulo' => 'Desconto aniversário de R$30', // título descritivo para o cupom
             'valor' => $valor,
-            'valor_minimo_curso' => $valor_minimo_curso
+            'valor_minimo_curso' => $valor_minimo_curso,
+            'aluno_id' => $aluno_id
         );
     
         // Inserindo os dados na tabela
