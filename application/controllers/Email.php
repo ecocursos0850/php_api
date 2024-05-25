@@ -98,9 +98,9 @@ class Email extends CI_Controller {
                 // Dados para a view
                 $dados = [
                     'destinatario' => $aluno->email,
-                    'assunto' => 'Feliz Aniversário!',
+                    'assunto' => "🎁 " . $aluno->nome . ", Ecocursos quer te dar um presente!",
                     'nome' => $aluno->nome,
-                    'presente' => $presente,
+                    'presente' => "ECO-" . strtoupper($presente),
                     'copy' => date("Y")
                 ];
         
@@ -141,7 +141,6 @@ class Email extends CI_Controller {
             }
         }
     }
-    
     
     private function generateCupom($aluno_id = null){
         // Gerando um código de cupom aleatório
@@ -184,7 +183,6 @@ class Email extends CI_Controller {
             return false; // Falha na inserção
         }
     }
-    
 
     public function requestPostgraduate(){
         // Obtenha o corpo da requisição POST enviado como JSON
