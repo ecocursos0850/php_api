@@ -41,7 +41,7 @@ class Email extends CI_Controller {
             'assunto' => $data["assunto"],
             'nome' => $data["nome"], // Adicione a variável senha
             'senha' => $data["senha"], // Adicione a variável senha
-            'logo' => base_url() . "assets/imgs/logo.png",
+            'logo' => "https://srv448021.hstgr.cloud/php_api/assets/imgs/logo.png",
             'copy' => date("Y") // Adicione a variável senha
         ];
 
@@ -102,8 +102,8 @@ class Email extends CI_Controller {
                     'assunto' => "🎁 " . $aluno->nome . ", Ecocursos quer te dar um presente!",
                     'nome' => $aluno->nome,
                     'presente' => "ECO-" . strtoupper($presente),
-                    'logo' => base_url() . "assets/imgs/logo.png",
-                    'presente' => base_url() . "assets/imgs/presente.png",
+                    'logo' => "https://srv448021.hstgr.cloud/php_api/assets/imgs/logo.png",
+                    'box' => "https://srv448021.hstgr.cloud/php_api/assets/imgs/presente.png",
                     'copy' => date("Y")
                 ];
         
@@ -208,7 +208,8 @@ class Email extends CI_Controller {
             'assunto' => $data["assunto"],
             'login' => $data["login"], // Adicione a variável login
             'senha' => $data["senha"], // Adicione a variável senha
-            'logo' => base_url() . "assets/imgs/logo.png",
+            'logo' => "https://srv448021.hstgr.cloud/php_api/assets/imgs/logo.png",
+            'eco' => "https://srv448021.hstgr.cloud/php_api/assets/imgs/eco.jpeg",
             'copy' => date("Y") // Adicione a variável copy
         ];
 
