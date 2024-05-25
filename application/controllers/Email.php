@@ -91,9 +91,9 @@ class Email extends CI_Controller {
     
             // Dados para a view
             $dados = [
-                'destinatario' => $aluno['email'],
+                'destinatario' => $aluno->email,
                 'assunto' => 'Feliz Aniversário!',
-                'nome' => $aluno['nome'],
+                'nome' => $aluno->nome,
                 'presente' => $presente,
                 'copy' => date("Y")
             ];
