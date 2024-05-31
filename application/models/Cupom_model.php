@@ -48,8 +48,23 @@ class Cupom_model extends CI_Model {
         $this->db->where('YEAR(data_cadastro)', date('Y'));
         $this->db->where('MONTH(data_cadastro)', date('m'));
         $this->db->where('DAY(data_cadastro)', date('d'));
+        $this->db->where('status', 1);
         $query = $this->db->get('cupom_desconto');
         
         return $query->num_rows() > 0;
     }
+
+    public function expiredStatusUpdate() {
+        // Obtém a data atual do servidor
+        $data_atual = date('Y-m-d');
+
+        // Monta a query para atualizar os registros
+        $this->db->set('status', 0);
+        $this->db->where('data_validade <', $data_atual);
+        $this->db->update('cupom_desconto');
+
+        // Retorna o número de linhas afetadas pela atualização
+        return $this->db->affected_rows();
+    }
+
 }
