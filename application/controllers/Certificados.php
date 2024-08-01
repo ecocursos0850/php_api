@@ -26,7 +26,7 @@ class Certificados extends CI_Controller {
     
             if (!file_exists($caminho_arquivo)) {
                 echo json_encode([
-                    "error" => "error",
+                    "result" => "error",
                     "message" => "Arquivo $arquivo não encontrado."
                 ]);
                 return;
@@ -38,7 +38,7 @@ class Certificados extends CI_Controller {
     
             if ($data_criacao === false) {
                 echo json_encode([
-                    "error" => "error",
+                    "result" => "error",
                     "message" => "Não foi possível obter a data de criação do arquivo $arquivo."
                 ]);
                 return;
@@ -48,7 +48,7 @@ class Certificados extends CI_Controller {
             if ($dias_arquivo <= $dias_limite) {
                 $todos_mais_velhos = false;
                 echo json_encode([
-                    "error" => "success",
+                    "result" => "success",
                     "message" => "Certificado SSL da API válido."
                 ]);
                 return;
@@ -57,12 +57,12 @@ class Certificados extends CI_Controller {
     
         if ($todos_mais_velhos) {
             echo json_encode([
-                "error" => "error",
+                "result" => "error",
                 "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado de imediato!"
             ]);
         } else {
             echo json_encode([
-                "error" => "success",
+                "result" => "success",
                 "message" => "O certificado não tem mais de $dias_limite dias de emissão."
             ]);
         }
