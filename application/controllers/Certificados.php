@@ -7,6 +7,10 @@ class Certificados extends CI_Controller {
     {
         parent::__construct();
         $this->load->helper('file');
+        // Defina os cabeçalhos CORS
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
    
     public function checkValidity(){
