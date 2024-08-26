@@ -62,7 +62,7 @@ class Certificados extends CI_Controller {
         if ($todos_mais_velhos) {
             echo json_encode([
                 "result" => "error",
-                "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado de imediato!"
+                "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado de imediatamente!"
             ]);
         } else {
             echo json_encode([
