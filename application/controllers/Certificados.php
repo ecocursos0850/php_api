@@ -15,15 +15,14 @@ class Certificados extends CI_Controller {
    
     public function checkValidity()
     {
-        // Atualize o caminho dos arquivos para os novos caminhos fornecidos
+        // Caminho dos arquivos
         $caminho = '/etc/ssl/';
         $arquivos = [
             'certificate.crt',
-            'private/private.key' // Nota: O caminho do arquivo 'private.key' inclui um diretório adicional
+            'private/private.key'
         ];
         $dias_limite = 80;
         $data_atual = time();
-        $todos_mais_velhos = true;
         $arquivos_com_mais_de_80_dias = 0;
     
         foreach ($arquivos as $arquivo) {
@@ -37,9 +36,8 @@ class Certificados extends CI_Controller {
                 return;
             }
     
-            // 'filectime' retorna o tempo de criação, mas pode não estar disponível em todos os sistemas de arquivos.
-            // Você pode considerar usar 'filemtime' para obter o tempo da última modificação como uma alternativa.
-            $data_criacao = filectime($caminho_arquivo);
+            // Usando filemtime para pegar a última modificação como referência
+            $data_criacao = filemtime($caminho_arquivo);
     
             if ($data_criacao === false) {
                 echo json_encode([
@@ -49,18 +47,16 @@ class Certificados extends CI_Controller {
                 return;
             }
     
-            $dias_arquivo = ($data_atual - $data_criacao) / (60 * 60 * 24);
+            $dias_arquivo = floor(($data_atual - $data_criacao) / (60 * 60 * 24));
             if ($dias_arquivo >= $dias_limite) {
                 $arquivos_com_mais_de_80_dias++;
-            } else {
-                $todos_mais_velhos = false;
             }
         }
     
         if ($arquivos_com_mais_de_80_dias === count($arquivos)) {
             echo json_encode([
                 "result" => "error",
-                "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado de imediatamente!"
+                "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado imediatamente!"
             ]);
         } else {
             echo json_encode([
@@ -69,5 +65,5 @@ class Certificados extends CI_Controller {
             ]);
         }
     }
-     
+      
 }
