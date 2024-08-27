@@ -16,10 +16,10 @@ class Certificados extends CI_Controller {
     public function checkValidity()
     {
         // Caminho dos arquivos
-        $caminho = '/etc/ssl/';
+        $caminho = '/etc/letsencrypt/live/srv448021.hstgr.cloud/';
         $arquivos = [
-            'certificate.crt',
-            'private/private.key'
+            'fullchain.pem',
+            'privkey.pem'
         ];
         $dias_limite = 80;
         $data_atual = time();
@@ -56,7 +56,7 @@ class Certificados extends CI_Controller {
         if ($arquivos_com_mais_de_80_dias === count($arquivos)) {
             echo json_encode([
                 "result" => "error",
-                "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado imediatamente!"
+                "message" => "Faltam poucos dias para o vencimento do certificado SSL/API. Renove o certificado imediatamente!"
             ]);
         } else {
             echo json_encode([
