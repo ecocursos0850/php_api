@@ -18,15 +18,15 @@ class Certificados extends CI_Controller {
         // Caminho dos arquivos
         $caminho = '/etc/letsencrypt/archive/srv448021.hstgr.cloud/';
         $arquivos = [
-            'fullchain2.pem',
-            'privkey2.pem'
+            '/etc/letsencrypt/archive/srv448021.hstgr.cloud/fullchain2.pem',
+            '/etc/letsencrypt/archive/srv448021.hstgr.cloud/privkey2.pem'
         ];
         $dias_limite = 80;
         $data_atual = time();
         $arquivos_com_mais_de_80_dias = 0;
     
         foreach ($arquivos as $arquivo) {
-            $caminho_arquivo = $caminho . $arquivo;
+            $caminho_arquivo = $arquivo;
     
             if (!file_exists($caminho_arquivo)) {
                 echo json_encode([
