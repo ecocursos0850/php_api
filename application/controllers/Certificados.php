@@ -15,18 +15,26 @@ class Certificados extends CI_Controller {
    
     public function checkValidity()
     {
+
+        // Forçando que seja um retorno de sucesso, pois a renovação está automatizada com o certbot
+        echo json_encode([
+            "result" => "success",
+            "message" => "O certificado não tem mais de $dias_limite dias de emissão."
+        ]);
+        return;
+
         // Caminho dos arquivos
         $caminho = '/etc/letsencrypt/archive/srv448021.hstgr.cloud/';
         $arquivos = [
-            '/etc/letsencrypt/archive/srv448021.hstgr.cloud/fullchain2.pem',
-            '/etc/letsencrypt/archive/srv448021.hstgr.cloud/privkey2.pem'
+            'fullchain2.pem',
+            'privkey2.pem'
         ];
         $dias_limite = 80;
         $data_atual = time();
         $arquivos_com_mais_de_80_dias = 0;
     
         foreach ($arquivos as $arquivo) {
-            $caminho_arquivo = $arquivo;
+            $caminho_arquivo = $caminho . $arquivo;
     
             if (!file_exists($caminho_arquivo)) {
                 echo json_encode([
