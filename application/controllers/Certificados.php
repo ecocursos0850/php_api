@@ -13,7 +13,8 @@ class Certificados extends CI_Controller {
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
    
-    public function checkValidity(){
+    public function checkValidity()
+    {
         // Atualize o caminho dos arquivos para os novos caminhos fornecidos
         $caminho = '/etc/ssl/';
         $arquivos = [
@@ -23,6 +24,7 @@ class Certificados extends CI_Controller {
         $dias_limite = 80;
         $data_atual = time();
         $todos_mais_velhos = true;
+        $arquivos_com_mais_de_80_dias = 0;
     
         foreach ($arquivos as $arquivo) {
             $caminho_arquivo = $caminho . $arquivo;
@@ -48,17 +50,14 @@ class Certificados extends CI_Controller {
             }
     
             $dias_arquivo = ($data_atual - $data_criacao) / (60 * 60 * 24);
-            if ($dias_arquivo <= $dias_limite) {
+            if ($dias_arquivo >= $dias_limite) {
+                $arquivos_com_mais_de_80_dias++;
+            } else {
                 $todos_mais_velhos = false;
-                echo json_encode([
-                    "result" => "success",
-                    "message" => "Certificado SSL da API válido."
-                ]);
-                return;
             }
         }
     
-        if ($todos_mais_velhos) {
+        if ($arquivos_com_mais_de_80_dias === count($arquivos)) {
             echo json_encode([
                 "result" => "error",
                 "message" => "Faltam 10 dias para o vencimento do certificado SSL/API. Renove o certificado de imediatamente!"
@@ -70,5 +69,5 @@ class Certificados extends CI_Controller {
             ]);
         }
     }
-    
+     
 }
