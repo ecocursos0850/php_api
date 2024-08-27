@@ -16,10 +16,10 @@ class Certificados extends CI_Controller {
     public function checkValidity()
     {
         // Caminho dos arquivos
-        $caminho = '/etc/letsencrypt/live/srv448021.hstgr.cloud/';
+        $caminho = '/etc/letsencrypt/archive/srv448021.hstgr.cloud/';
         $arquivos = [
-            'fullchain.pem',
-            'privkey.pem'
+            'fullchain2.pem',
+            'privkey2.pem'
         ];
         $dias_limite = 80;
         $data_atual = time();
