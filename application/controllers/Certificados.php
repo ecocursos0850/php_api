@@ -18,7 +18,6 @@ class Certificados extends CI_Controller {
         $caminho = '/etc/ssl/';
         $arquivos = [
             'certificate.crt',
-            'ca_bundle.crt',
             'private/private.key' // Nota: O caminho do arquivo 'private.key' inclui um diretório adicional
         ];
         $dias_limite = 80;
