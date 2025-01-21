@@ -68,7 +68,7 @@
             <div class="bloco-matriculas" style="display: none">
                 <hr class="mb-4">
                     <h4 class="mb-3">Selecione a matrícula</h4>
-                    <div id="lista-cursos" class="custom-control custom-checkbox">
+                    <div id="lista-cursos" class="custom-control custom-radio">
                     <!-- Aqui será preenchido dinamicamente pelo jQuery -->
                     </div>
                 <hr class="mb-4">
