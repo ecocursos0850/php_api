@@ -97,7 +97,6 @@
                 var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
                 if (cpf.length === 11) { // Verifica se o CPF tem 11 dígitos
                     // Executa a busca das matrículas do aluno e atualiza a lista de cursos
-                    $(".bloco-matriculas").removeAttr("style","display: none");
                     buscarCursos(cpf);
                 }
             });
@@ -111,18 +110,23 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        // Limpa a lista de cursos anterior
-                        $('#lista-cursos').empty();
-                        // Adiciona os cursos ao HTML
-                        response.forEach(function(curso) {
-                            var checkboxHtml = `
-                                <div class="custom-control custom-checkbox">
-                                    <input type="radio" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
-                                    <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
-                                </div>
-                            `;
-                            $('#lista-cursos').append(checkboxHtml);
-                        });
+                        if (Array.isArray(response) && response.length > 0) {
+                            $(".bloco-matriculas").removeAttr("style","display: none");
+                            // Limpa a lista de cursos anterior
+                            $('#lista-cursos').empty();
+                            // Adiciona os cursos ao HTML
+                            response.forEach(function(curso) {
+                                var checkboxHtml = `
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="radio" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
+                                        <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
+                                    </div>
+                                `;
+                                $('#lista-cursos').append(checkboxHtml);
+                            });
+                        }else{
+                            $(".bloco-matriculas").attr("style","display: none");
+                        }
                     },
                     error: function() {
                         $(".bloco-matriculas").attr("style", "display: none");
