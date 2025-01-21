@@ -167,7 +167,7 @@ class Declaracao extends CI_Controller {
     
         // Usar transações para evitar inconsistências
         $this->db->trans_start();
-        $result = $this->Declaracao_matricula->inserir($data);
+        $result = $this->Declaracao_model->inserir($data);
         $this->db->trans_complete();
     
         if ($this->db->trans_status() === false || $result['lines'] <= 0) {
