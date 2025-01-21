@@ -14,6 +14,9 @@ class Declaracao extends CI_Controller {
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
+    public function index(){
+        $this->load->view("declaracao");
+    }
     public function salvar()
     {
         // Verifica se é um método POST
