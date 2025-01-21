@@ -97,6 +97,7 @@
                 var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
                 if (cpf.length === 11) { // Verifica se o CPF tem 11 dígitos
                     // Executa a busca das matrículas do aluno e atualiza a lista de cursos
+                    $(".bloco-matriculas").removeAttr("style","display: none");
                     buscarCursos(cpf);
                 }
             });
@@ -112,8 +113,6 @@
                     success: function(response) {
                         // Limpa a lista de cursos anterior
                         $('#lista-cursos').empty();
-
-                        $(".bloco-matriculas").removeAttr("style","display: none");
                         // Adiciona os cursos ao HTML
                         response.forEach(function(curso) {
                             var checkboxHtml = `
