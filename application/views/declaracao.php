@@ -48,7 +48,7 @@
                 </div>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="lastName">Last name</label>
+                <label for="lastName">Data Final</label>
                 <input type="date" class="form-control" id="finalPeriodo" name="finalPeriodo" placeholder="" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
