@@ -66,11 +66,13 @@
               </div>
             </div>
             <div class="bloco-matriculas" style="display: none">
-                <hr class="mb-4">
-                    <h4 class="mb-3">Selecione a matrícula</h4>
-                    <div id="lista-cursos" class="d-block my-3">
+            <div class="col-md-5 mb-3">
+                <label for="country">Country</label>
+                    <select class="custom-select d-block w-100" id="matricula" name="matricula" required=""></select>
+                    <div class="invalid-feedback">
+                    Campo obrigatório.
                     </div>
-                <hr class="mb-4">
+              </div>
             </div>
             <hr class="mb-4">
             <button class="btn btn-primary btn-lg btn-block" type="submit">Continuar</button>
@@ -115,13 +117,12 @@
                             $('#lista-cursos').empty();
                             // Adiciona os cursos ao HTML
                             response.forEach(function(curso) {
-                                var checkboxHtml = `
-                                    <div class="custom-control custom-radio">
-                                        <input id="curso-${curso.matricula_id}" name="paymentMethod" type="radio" class="custom-control-input" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
-                                        <label class="custom-control-label" for="paypal">Paypal</label>
-                                    </div>                               
+                                var optionHtml = `
+                                    <option value="${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-curso-id="${curso.curso_id}">
+                                        ${curso.titulo}
+                                    </option>
                                 `;
-                                $('#lista-cursos').append(checkboxHtml);
+                                $('#matricula').append(optionHtml);
                             });
                         }else{
                             $(".bloco-matriculas").attr("style","display: none");
