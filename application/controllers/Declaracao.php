@@ -108,11 +108,11 @@ class Declaracao extends CI_Controller {
         }
     
         // Recebe os dados do formulário e valida campos obrigatórios
-        $inicioPeriodo = $this->input->post('inicioPeriodo', true);
-        $finalPeriodo = $this->input->post('finalPeriodo', true);
-        $aluno_id = $this->input->post('aluno_id', true);
-        $curso_id = $this->input->post('curso_id', true);
-        $matricula_id = $this->input->post('matricula_id', true);
+        $inicioPeriodo = $this->input->post('inicioPeriodo');
+        $finalPeriodo = $this->input->post('finalPeriodo');
+        $aluno_id = $this->input->post('aluno_id');
+        $curso_id = $this->input->post('curso_id');
+        $matricula_id = $this->input->post('matricula_id');
     
         // Verifica se os campos obrigatórios estão presentes
         if (empty($inicioPeriodo) || empty($finalPeriodo) || empty($aluno_id) || empty($curso_id) || empty($matricula_id)) {
