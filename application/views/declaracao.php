@@ -111,6 +111,8 @@
                     url: "https://srv448021.hstgr.cloud/php_api/alunos/get_matriculas_por_cpf/" + cpf,
                     method: 'GET',
                     dataType: 'json',
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         // Limpa a lista de cursos anterior
                         $('#lista-cursos').empty();
