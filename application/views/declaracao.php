@@ -68,6 +68,20 @@
             <div class="bloco-matriculas" style="display: none">
                 <hr class="mb-4">
                     <h4 class="mb-3">Selecione a matrícula</h4>
+                    <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked="" required="">
+                <label class="custom-control-label" for="credit">Credit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="debit">Debit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="paypal">Paypal</label>
+              </div>
+            </div>
                     <div id="lista-cursos" class="custom-control custom-radio">
                     <!-- Aqui será preenchido dinamicamente pelo jQuery -->
                     </div>
