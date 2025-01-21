@@ -42,14 +42,14 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label for="firstName">Data Início</label>
-                <input type="date" class="form-control" id="inicio_periodo" name="inicio_periodo" placeholder="" required>
+                <input type="date" class="form-control" id="inicioPeriodo" name="inicioPeriodo" placeholder="" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
                 </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="lastName">Last name</label>
-                <input type="date" class="form-control" id="final_periodo" name="final_periodo" placeholder="" required>
+                <input type="date" class="form-control" id="finalPeriodo" name="finalPeriodo" placeholder="" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
                 </div>
