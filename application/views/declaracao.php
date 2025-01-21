@@ -118,7 +118,7 @@
                             response.forEach(function(curso) {
                                 var checkboxHtml = `
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
+                                        <input id="curso" name="curso" type="radio" class="custom-control-input" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
                                         <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
                                     </div>
                                 `;
