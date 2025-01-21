@@ -8,6 +8,18 @@
 <body>
     <h1>Solicitar Declaração</h1>
     <form action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="inicioPeriodo">Aluno ID:</label>
+            <input type="text" id="aluno_id" name="aluno_id" required>
+        </div>
+        <div>
+            <label for="inicioPeriodo">Matrícula ID:</label>
+            <input type="text" id="matricula_id" name="matricula_id" required>
+        </div>
+        <div>
+            <label for="inicioPeriodo">Curso ID:</label>
+            <input type="text" id="curso_id" name="curso_id" required>
+        </div>
         <!-- Campo de data início -->
         <div>
             <label for="inicioPeriodo">Data Início:</label>
