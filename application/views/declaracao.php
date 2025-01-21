@@ -66,8 +66,8 @@
               </div>
             </div>
             <div class="bloco-matriculas" style="display: none">
-            <div class="col-md-5 mb-3">
-                <label for="country">Country</label>
+            <div class="d-block my-3">
+                <label for="country">Selecione a matrícula</label>
                     <select class="custom-select d-block w-100" id="matricula" name="matricula" required=""></select>
                     <div class="invalid-feedback">
                     Campo obrigatório.
@@ -93,6 +93,16 @@
     <!-- Seu código JavaScript -->
     <script>
         $(document).ready(function() {
+            $('#matricula').on('change', function() {
+                // Obtém o <option> selecionado
+                var selectedOption = $(this).find('option:selected');
+
+                // Define os valores nos campos ocultos
+                $('#aluno_id').val(selectedOption.data('aluno-id'));
+                $('#curso_id').val(selectedOption.data('curso-id'));
+                $('#matricula_id').val(selectedOption.val());
+            });
+
             // Escuta o evento de digitação no campo CPF
             $('#cpf').on('input', function() {
                 var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
