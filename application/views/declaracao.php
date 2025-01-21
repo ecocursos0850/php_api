@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Solicitar Declaração</h1>
-    <form action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar') ?>" method="POST" enctype="multipart/form-data">
+    <form action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar" method="POST" enctype="multipart/form-data">
         <!-- Campo de data início -->
         <div>
             <label for="inicioPeriodo">Data Início:</label>
