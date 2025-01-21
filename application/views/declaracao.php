@@ -69,7 +69,7 @@
             <hr class="mb-4">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="same-address">
-              <label class="custom-control-label" for="same-address">.</label>
+              <label class="custom-control-label" for="same-address">Selecione o curso</label>
             </div>
             <div id="lista-cursos" class="custom-control custom-checkbox">
             <!-- Aqui será preenchido dinamicamente pelo jQuery -->
@@ -121,7 +121,7 @@
                         response.forEach(function(curso) {
                             var checkboxHtml = `
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
+                                    <input type="radio" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
                                     <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
                                 </div>
                             `;
