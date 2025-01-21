@@ -113,6 +113,8 @@
                         // Limpa a lista de cursos anterior
                         $('#lista-cursos').empty();
 
+                        $("#bloco-matriculas").removeAttr("style");
+                        $(".bloco-matriculas").removeAttr("style");
                         // Adiciona os cursos ao HTML
                         response.forEach(function(curso) {
                             var checkboxHtml = `
@@ -122,8 +124,6 @@
                                 </div>
                             `;
                             $('#lista-cursos').append(checkboxHtml);
-                            $("#bloco-matriculas").removeAttr("style");
-                            $(".bloco-matriculas").removeAttr("style");
                         });
                     },
                     error: function() {
