@@ -22,7 +22,7 @@
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="https://www.ecocursos.com.br/assets/images/Logo1.png" width="262.5" height="77.47">
         <h2>Declaração emitida com sucesso!</h2>
-        <p>Para imprimir a declaração, acessa o portal do aluno.</p>
+        <p>Para imprimir a declaração, acesse o portal do aluno.</p>
       </div>
 
       <footer class="my-5 pt-5 text-muted text-center text-small">
