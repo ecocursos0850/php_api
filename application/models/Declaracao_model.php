@@ -89,4 +89,13 @@ class Declaracao_model extends CI_Model {
         $query = $this->db->get('declaracao_matricula');
         return $query->result(); // Retorna todos os resultados como um array de objetos
     }
+
+    public function existe_declaracao($aluno_id, $curso_id, $matricula_id) {
+        $this->db->where('aluno_id', $aluno_id);
+        $this->db->where('curso_id', $curso_id);
+        $this->db->where('matricula_id', $matricula_id);
+        $query = $this->db->get('declaracao_matricula');
+
+        return $query->num_rows() > 0; // Retorna true se houver registros
+    }    
 }

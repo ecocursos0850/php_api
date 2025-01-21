@@ -37,13 +37,19 @@ class Alunos extends CI_Controller {
         $cursos = [];
         foreach ($matriculas as $matricula) {
             $curso = $this->Curso_model->get_curso_by_id($matricula->curso_id);
+        
             if ($curso) {
-                $cursos[] = [
-                    'aluno_id' => $aluno[0]->id,
-                    'matricula_id' => $matricula->id,
-                    'curso_id' => $curso->id,
-                    'titulo' => $curso->titulo
-                ];
+                // Verifica se existe uma declaração para este aluno, curso e matrícula
+                $declaracao_existe = $this->Declaracao_model->existe_declaracao($aluno[0]->id, $curso->id, $matricula->id);
+        
+                if (!$declaracao_existe) {
+                    $cursos[] = [
+                        'aluno_id' => $aluno[0]->id,
+                        'matricula_id' => $matricula->id,
+                        'curso_id' => $curso->id,
+                        'titulo' => $curso->titulo
+                    ];
+                }
             }
         }
 
