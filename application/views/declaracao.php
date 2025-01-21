@@ -38,16 +38,6 @@
             <input type="file" id="file" name="file" accept=".pdf, .jpg, .jpeg, .png" required>
         </div>
         
-        <!-- Campo oculto para aluno_id -->
-        <input type="hidden" name="aluno_id" value="1"> <!-- Substitua pelo ID correto do aluno -->
-
-        <!-- Campo oculto para curso_id -->
-        <input type="hidden" name="curso_id" value="1"> <!-- Substitua pelo ID correto do curso -->
-
-        <!-- Campo oculto para matricula_id -->
-        <input type="hidden" name="matricula_id" value="1"> <!-- Substitua pelo ID correto da matrícula -->
-        
-        <!-- Botão de envio -->
         <div>
             <button type="submit">Solicitar Declaração</button>
         </div>
