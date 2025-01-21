@@ -95,43 +95,44 @@
 
     <!-- Seu código JavaScript -->
     <script>
-    $(document).ready(function() {
-        // Escuta o evento de digitação no campo CPF
-        $('#cpf').on('input', function() {
-            var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
-            if (cpf.length === 11) { // Verifica se o CPF tem 11 dígitos
-                // Executa a busca das matrículas do aluno e atualiza a lista de cursos
-                buscarCursos(cpf);
+        $(document).ready(function() {
+            // Escuta o evento de digitação no campo CPF
+            $('#cpf').on('input', function() {
+                var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
+                if (cpf.length === 11) { // Verifica se o CPF tem 11 dígitos
+                    // Executa a busca das matrículas do aluno e atualiza a lista de cursos
+                    buscarCursos(cpf);
+                }
+            });
+
+            function buscarCursos(cpf) {
+                // A partir do CPF capturado, você pode fazer uma chamada AJAX para o servidor
+                $.ajax({
+                    url: 'https://srv448021.hstgr.cloud/php_api/alunos/get_matriculas_por_cpf', // Substitua pelo seu endpoint
+                    method: 'GET',
+                    data: { cpf: cpf }, // Envia o CPF como parâmetro
+                    success: function(response) {
+                        // Limpa a lista de cursos anterior
+                        $('#lista-cursos').empty();
+
+                        // Adiciona os cursos ao HTML
+                        response.forEach(function(curso) {
+                            var checkboxHtml = `
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="curso-${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
+                                    <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
+                                </div>
+                            `;
+                            $('#lista-cursos').append(checkboxHtml);
+                        });
+                    },
+                    error: function() {
+                        alert('Erro ao buscar cursos.');
+                    }
+                });
             }
         });
 
-        function buscarCursos(cpf) {
-            // A partir do CPF capturado, você pode fazer uma chamada AJAX para o servidor
-            $.ajax({
-                url: 'https://srv448021.hstgr.cloud/php_api/alunos/get_matriculas_por_cpf', // Substitua pelo seu endpoint
-                method: 'GET',
-                data: { cpf: cpf }, // Envia o CPF como parâmetro
-                success: function(response) {
-                    // Limpa a lista de cursos anterior
-                    $('#lista-cursos').empty();
-
-                    // Adiciona os cursos ao HTML
-                    response.cursos.forEach(function(curso) {
-                        var checkboxHtml = `
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="curso-${curso.id}" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
-                                <label class="custom-control-label" for="curso-${curso.id}">${curso.titulo}</label>
-                            </div>
-                        `;
-                        $('#lista-cursos').append(checkboxHtml);
-                    });
-                },
-                error: function() {
-                    alert('Erro ao buscar cursos.');
-                }
-            });
-        }
-    });
     </script>
   </body>
 </html>
