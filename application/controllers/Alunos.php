@@ -7,7 +7,7 @@ class Alunos extends CI_Controller {
     {
         parent::__construct();
         $this->load->model("Alunos_model");
-        $this->load->model("Matriculas_model");
+        $this->load->model("Matricula_model");
         // Defina os cabeçalhos CORS
         header('Access-Control-Allow-Origin: *');
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
