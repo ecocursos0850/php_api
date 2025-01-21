@@ -67,7 +67,7 @@
             </div>
             <div class="bloco-matriculas" style="display: none">
                 <hr class="mb-4">
-                    <h4 id="bloco-matriculas" class="mb-3">Selecione a matrícula</h4>
+                    <h4 class="mb-3">Selecione a matrícula</h4>
                     <div id="lista-cursos" class="custom-control custom-checkbox">
                     <!-- Aqui será preenchido dinamicamente pelo jQuery -->
                     </div>
@@ -113,8 +113,7 @@
                         // Limpa a lista de cursos anterior
                         $('#lista-cursos').empty();
 
-                        $("#bloco-matriculas").removeAttr("style");
-                        $(".bloco-matriculas").removeAttr("style");
+                        $(".bloco-matriculas").removeAttr("style","display: none");
                         // Adiciona os cursos ao HTML
                         response.forEach(function(curso) {
                             var checkboxHtml = `
@@ -127,7 +126,6 @@
                         });
                     },
                     error: function() {
-                        $("#bloco-matriculas").attr("style", "display: none");
                         $(".bloco-matriculas").attr("style", "display: none");
                         alert('Erro ao buscar cursos.');
                     }
