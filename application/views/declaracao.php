@@ -107,7 +107,7 @@ $(document).ready(function() {
   function buscarCursos(cpf) {
     // A partir do CPF capturado, você pode fazer uma chamada AJAX para o servidor
     $.ajax({
-      url: 'seu_endpoint_para_buscar_matriculas', // Substitua pelo seu endpoint
+      url: 'https://srv448021.hstgr.cloud/php_api/alunos/get_matriculas_por_cpf', // Substitua pelo seu endpoint
       method: 'GET',
       data: { cpf: cpf }, // Envia o CPF como parâmetro
       success: function(response) {
