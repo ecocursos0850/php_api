@@ -6,6 +6,13 @@ class Alunos_model extends CI_Model {
         parent::__construct();
         $this->table = "aluno";
     }
+    
+    public function get_aluno_by_cpf($cpf) {
+        // Consultar a tabela alunos pelo CPF
+        $this->db->where('cpf', $cpf);
+        $query = $this->db->get('alunos'); // Substitua 'alunos' pelo nome da sua tabela
+        return $query->result(); // Retorna os resultados
+    }
 
     // Listar dados para aniversariantes do mês
     function listHappyBirthday()
