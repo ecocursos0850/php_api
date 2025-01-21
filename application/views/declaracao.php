@@ -65,9 +65,9 @@
                 </div>
               </div>
             </div>
-            <div id="bloco-matriculas" style="display: none">
+            <div class="bloco-matriculas" style="display: none">
                 <hr class="mb-4">
-                    <h4 class="mb-3">Selecione a matrícula</h4>
+                    <h4 class="mb-3 bloco-matriculas">Selecione a matrícula</h4>
                     <div id="lista-cursos" class="custom-control custom-checkbox">
                     <!-- Aqui será preenchido dinamicamente pelo jQuery -->
                     </div>
@@ -122,12 +122,12 @@
                                 </div>
                             `;
                             $('#lista-cursos').append(checkboxHtml);
-                            $("#bloco-matriculas").removeAttr("style");
+                            $(".bloco-matriculas").removeAttr("style");
                         });
                     },
                     error: function() {
 
-                        $("#bloco-matriculas").Attr("style", "display: none");
+                        $(".bloco-matriculas").attr("style", "display: none");
                         alert('Erro ao buscar cursos.');
                     }
                 });
