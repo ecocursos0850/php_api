@@ -118,9 +118,9 @@
                             response.forEach(function(curso) {
                                 var checkboxHtml = `
                                     <div class="custom-control custom-radio">
-                                        <input id="curso" name="curso" type="radio" class="custom-control-input" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
-                                        <label class="custom-control-label" for="curso-${curso.matricula_id}">${curso.titulo}</label>
-                                    </div>
+                                        <input id="curso-${curso.matricula_id}" name="curso" type="radio" class="custom-control-input" data-aluno-id="${curso.aluno_id}" data-matricula-id="${curso.matricula_id}" data-curso-id="${curso.curso_id}">
+                                        <label class="custom-control-label" for="credit">Credit card</label>
+                                    </div>                                    
                                 `;
                                 $('#lista-cursos').append(checkboxHtml);
                             });
