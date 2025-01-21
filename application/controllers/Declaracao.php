@@ -134,7 +134,7 @@ class Declaracao extends CI_Controller {
         }
     
         // Define o caminho de upload
-        $uploadPath = FCPATH . 'uploads/declaracoes/';
+        $uploadPath = '/var/www/html/Declaracao/';
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0755, true);
         }
@@ -163,6 +163,7 @@ class Declaracao extends CI_Controller {
             'curso_id' => $curso_id,
             'matricula_id' => $matricula_id,
             'status' => 1, // Status ativo por padrão
+            'valor' => 100
         ];
     
         // Usar transações para evitar inconsistências
@@ -173,15 +174,15 @@ class Declaracao extends CI_Controller {
         if ($this->db->trans_status() === false || $result['lines'] <= 0) {
             show_error('Erro ao solicitar declaração: ' . ($result['message'] ?? 'Erro desconhecido'), 400);
         }
-    
-        // Retorna uma resposta de sucesso
+        $this->load->view("declaracao_sucesso");
+        /* Retorna uma resposta de sucesso
         return $this->output
             ->set_status_header(201)
             ->set_content_type('application/json')
             ->set_output(json_encode([
                 'message' => 'Declaração solicitada com sucesso!',
                 'id' => $result["id"]
-            ]));
+            ]));*/
     }
     
 }
