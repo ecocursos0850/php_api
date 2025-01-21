@@ -19,7 +19,7 @@ class Alunos extends CI_Controller {
     {
         // Obtenha as informações do aluno
         $aluno = $this->Alunos_model->get_aluno_by_cpf($cpf);
-die($cpf);
+
         if (empty($aluno)) {
             echo json_encode(['error' => 'Aluno não encontrado']);
             return;
