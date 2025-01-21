@@ -134,6 +134,11 @@
                                 `;
                                 $('#matricula').append(optionHtml);
                             });
+
+                            // Seleciona a primeira opção e dispara o evento change
+                            if (response.length > 0) {
+                                $('#matricula').val(response[0].matricula_id).change();
+                            }
                         }else{
                             $(".bloco-matriculas").attr("style","display: none");
                         }
