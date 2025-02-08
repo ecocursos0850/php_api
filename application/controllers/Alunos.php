@@ -16,6 +16,56 @@ class Alunos extends CI_Controller {
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
+    public function index() {
+        $this->load->view('aluno_upload');
+    }
+
+    public function uploadExcel() {
+        if (!isset($_FILES['file']) || $_FILES['file']['error'] != 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar o arquivo.']);
+            return;
+        }
+
+        $filePath = $_FILES['file']['tmp_name'];
+
+        require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
+        $data = $spreadsheet->getActiveSheet()->toArray();
+
+        if (count($data) < 2) {
+            echo json_encode(['status' => 'error', 'message' => 'Arquivo Excel inválido.']);
+            return;
+        }
+
+        $result = [];
+        foreach (array_slice($data, 1) as $row) {
+            $result[] = [
+                'cpf' => trim($row[0]),
+                'email' => trim($row[1]),
+                'parceiro_id' => trim($row[2]),
+            ];
+        }
+
+        echo json_encode(['status' => 'success', 'data' => $result]);
+    }
+
+    public function atualizarParceiro() {
+        $dados = json_decode($this->input->raw_input_stream, true);
+        
+        if (empty($dados)) {
+            echo json_encode(['status' => 'error', 'message' => 'Nenhum dado enviado.']);
+            return;
+        }
+
+        $atualizado = $this->Aluno_model->atualizarParceiro($dados);
+
+        if ($atualizado) {
+            echo json_encode(['status' => 'success', 'message' => 'Dados atualizados com sucesso!']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar os dados.']);
+        }
+    }
+
     public function get_matriculas_por_cpf($cpf)
     {
         // Obtenha as informações do aluno

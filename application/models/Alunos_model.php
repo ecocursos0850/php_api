@@ -7,6 +7,13 @@ class Alunos_model extends CI_Model {
         $this->table = "aluno";
     }
 
+    public function atualizarParceiro($dados) {
+        $this->db->where_in('cpf', array_column($dados, 'cpf'));
+        $this->db->where_in('email', array_column($dados, 'email'));
+        $this->db->where_in('parceiro_id', array_column($dados, 'parceiro_id'));
+        return $this->db->update('aluno', ['parceiro_id' => 0]);
+    }
+    
     public function get_aluno_by_cpf($cpf) {
         // Consultar a tabela alunos pelo CPF
         $this->db->where('cpf', $cpf);
