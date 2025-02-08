@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 class Alunos extends CI_Controller {
 
     public function __construct()
@@ -28,9 +33,9 @@ class Alunos extends CI_Controller {
 
         $filePath = $_FILES['file']['tmp_name'];
 
-        require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filePath);
-        $data = $spreadsheet->getActiveSheet()->toArray();
+        //require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
+        $reader = new Xlsx();
+        $spreadsheet = $reader->load($filePath);
 
         if (count($data) < 2) {
             echo json_encode(['status' => 'error', 'message' => 'Arquivo Excel inválido.']);
