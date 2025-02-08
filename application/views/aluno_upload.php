@@ -43,7 +43,7 @@
                 let formData = new FormData();
                 formData.append("file", fileInput);
 
-                fetch("<?= site_url('aluno/uploadExcel') ?>", {
+                fetch("<?= site_url('alunos/uploadExcel') ?>", {
                     method: "POST",
                     body: formData
                 })
