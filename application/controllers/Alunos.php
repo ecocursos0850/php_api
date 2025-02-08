@@ -30,27 +30,33 @@ class Alunos extends CI_Controller {
             echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar o arquivo.']);
             return;
         }
-
+    
         $filePath = $_FILES['file']['tmp_name'];
-
-        //require_once APPPATH . 'third_party/PhpSpreadsheet/vendor/autoload.php';
+    
         $reader = new Xlsx();
-        $spreadsheet = $reader->load($filePath);
-
+        
+        try {
+            $spreadsheet = $reader->load($filePath);
+            $data = $spreadsheet->getActiveSheet()->toArray(); // Define a variável $data
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao processar o arquivo Excel.']);
+            return;
+        }
+    
         if (count($data) < 2) {
             echo json_encode(['status' => 'error', 'message' => 'Arquivo Excel inválido.']);
             return;
         }
-
+    
         $result = [];
         foreach (array_slice($data, 1) as $row) {
             $result[] = [
-                'cpf' => trim($row[0]),
-                'email' => trim($row[1]),
-                'parceiro_id' => trim($row[2]),
+                'cpf' => isset($row[0]) ? trim($row[0]) : '',
+                'email' => isset($row[1]) ? trim($row[1]) : '',
+                'parceiro_id' => isset($row[2]) ? trim($row[2]) : '',
             ];
         }
-
+    
         echo json_encode(['status' => 'success', 'data' => $result]);
     }
 
