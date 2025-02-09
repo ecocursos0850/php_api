@@ -1,32 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload de Alunos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 </head>
-<body>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <img src="https://www.ecocursos.com.br/assets/images/Logo1.png" width="262.5" height="77.47">
+            <h2 class="mt-3">Upload de Alunos</h2>
+        </div>
 
-    <h2>Upload de Arquivo Excel</h2>
-    <input type="file" id="fileInput" />
-    <button id="uploadBtn">Upload</button>
-    
-    <h2>Dados Importados</h2>
-    <table id="alunosTable" class="display" style="width:100%">
-        <thead>
-            <tr>
-                <th>CPF</th>
-                <th>Email</th>
-                <th>Parceiro</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <div class="card p-4">
+            <h4 class="mb-3">Enviar Arquivo</h4>
+            <div class="mb-3">
+                <label for="fileInput" class="form-label">Selecione um arquivo Excel (.xlsx)</label>
+                <input type="file" class="form-control" id="fileInput" accept=".xlsx" required>
+            </div>
+            <button class="btn btn-primary w-100" id="uploadBtn">Enviar</button>
+        </div>
 
-    <button id="confirmBtn" style="display:none;">Confirmar Atualização</button>
+        <div class="mt-5">
+            <h4>Dados Importados</h4>
+            <table id="alunosTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>CPF</th>
+                        <th>Email</th>
+                        <th>Parceiro</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="confirmBtn" class="btn btn-success w-100 mt-3" style="display:none;">Confirmar Atualização</button>
+        </div>
+    </div>
 
     <script>
         $(document).ready(function () {
@@ -83,6 +97,5 @@
             });
         });
     </script>
-
 </body>
 </html>
