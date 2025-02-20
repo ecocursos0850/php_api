@@ -30,6 +30,7 @@
               Para a emissão da declaração, é necessário o pagamento de uma taxa no valor de R$ 50,00.<br>
               💰 Forma de pagamento: PIX – Chave: 10.930.297/0001-48<br>
               📎 Importante: O comprovante de pagamento deve ser anexado ao pedido para que a solicitação seja processada.<br>
+              Após concluir a solicitação aguarde que nossos colaboradores estarão atentos ao seu pedido. <br>
               Dúvidas? Entre em contato com nosso suporte através do telefone +55 (17) 3422-3725.
           </div>
           <form class="card p-2" action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar" method="POST" enctype="multipart/form-data">
@@ -39,21 +40,21 @@
 
             <div class="row">
               <div class="col-md-12 mb-3">
-                <label for="firstName">CPF do Aluno</label>
+                <label for="firstName">CPF do Aluno (Obrigatório)</label>
                 <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Por favor, informe o CPF sem traço e pontos." maxlength="11" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
                 </div>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="firstName">Data Início</label>
+                <label for="firstName">Data Início (Obrigatório)</label>
                 <input type="date" class="form-control" id="inicioPeriodo" name="inicioPeriodo" placeholder="" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
                 </div>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="lastName">Data Final</label>
+                <label for="lastName">Data Final (Obrigatório)</label>
                 <input type="date" class="form-control" id="finalPeriodo" name="finalPeriodo" placeholder="" required>
                 <div class="invalid-feedback">
                   Campo obrigatório.
@@ -62,7 +63,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="username">Comprovante</label>
+              <label for="username">Anexar Comprovante no formato PDF (Obrigatório)</label>
               <div class="input-group">
                 <input type="file" class="form-control" id="file" name="file" required>
                 <div class="invalid-feedback" style="width: 100%;">
@@ -72,7 +73,7 @@
             </div>
             <div class="bloco-matriculas" style="display: none">
             <div class="d-block my-3">
-                <label for="country">Selecione a matrícula</label>
+                <label for="country">Selecione a matrícula a qual deseja a solicitação de declaração (Obrigatório)</label>
                     <select class="custom-select d-block w-100" id="matricula" name="matricula" required=""></select>
                     <div class="invalid-feedback">
                     Campo obrigatório.
