@@ -26,7 +26,12 @@
 
       <div class="row">
         <div class="col-md-12 order-md-1">
-          <h4 class="mb-3">Dados da Declaração</h4>
+          <div class="alert alert-danger" role="alert">
+              Para a emissão da declaração, é necessário o pagamento de uma taxa no valor de R$ 50,00.<br>
+              💰 Forma de pagamento: PIX – Chave: 10.930.297/0001-48<br>
+              📎 Importante: O comprovante de pagamento deve ser anexado ao pedido para que a solicitação seja processada.<br>
+              Dúvidas? Entre em contato com nosso suporte através do telefone +55 (17) 3422-3725.
+          </div>
           <form class="card p-2" action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar" method="POST" enctype="multipart/form-data">
             <input type="hidden" id="aluno_id" name="aluno_id">
             <input type="hidden" id="matricula_id" name="matricula_id">
