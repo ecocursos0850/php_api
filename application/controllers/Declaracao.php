@@ -153,51 +153,57 @@ class Declaracao extends CI_Controller {
     }
     
     public function gravar() {
-        // Set CORS headers
+        // Configura headers CORS
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
         
         try {
-            // Verify POST method
+            // Verifica se é POST
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception("Método não permitido", 405);
             }
     
-            // Get and sanitize input data
+            // Recebe e sanitiza os dados
             $inicioPeriodo = $this->input->post('inicioPeriodo', true);
             $finalPeriodo = $this->input->post('finalPeriodo', true);
-            $aluno_id = $this->input->post('aluno_id', true);
-            $curso_id = $this->input->post('curso_id', true);
-            $matricula_id = $this->input->post('matricula_id', true);
+            $aluno_id = (int)$this->input->post('aluno_id', true);
+            $curso_id = (int)$this->input->post('curso_id', true);
+            $matricula_id = (int)$this->input->post('matricula_id', true);
     
-            // Validate required fields
+            // Validação dos campos obrigatórios
             $errors = [];
             if (empty($inicioPeriodo)) $errors[] = 'Data de início é obrigatória';
             if (empty($finalPeriodo)) $errors[] = 'Data final é obrigatória';
-            if (!is_numeric($aluno_id) || $aluno_id <= 0) $errors[] = 'ID do aluno inválido';
-            if (!is_numeric($curso_id) || $curso_id <= 0) $errors[] = 'ID do curso inválido';
-            if (!is_numeric($matricula_id) || $matricula_id <= 0) $errors[] = 'ID da matrícula inválido';
+            if ($aluno_id <= 0) $errors[] = 'ID do aluno inválido';
+            if ($curso_id <= 0) $errors[] = 'ID do curso inválido';
+            if ($matricula_id <= 0) $errors[] = 'ID da matrícula inválido';
             
             if (!empty($errors)) {
                 throw new Exception(implode("\n", $errors), 400);
             }
     
-            // Validate file upload
+            // Validação do arquivo
             if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
-                throw new Exception("Erro no upload do arquivo. Código: " . ($_FILES['file']['error'] ?? 'N/A'), 400);
+                throw new Exception("Erro no envio do arquivo. Código: " . ($_FILES['file']['error'] ?? 'N/A'), 400);
             }
     
             $file = $_FILES['file'];
     
-            // File validation
-            $allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            // Verificação do tipo e tamanho do arquivo
+            $allowedMimeTypes = [
+                'application/pdf' => 'pdf',
+                'image/jpeg' => 'jpg',
+                'image/jpg' => 'jpg',
+                'image/png' => 'png'
+            ];
+            
             $maxSize = 5 * 1024 * 1024; // 5MB
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($fileInfo, $file['tmp_name']);
             finfo_close($fileInfo);
     
-            if (!in_array($mimeType, $allowedTypes)) {
+            if (!array_key_exists($mimeType, $allowedMimeTypes)) {
                 throw new Exception("Tipo de arquivo inválido. Apenas PDF, JPG e PNG são permitidos.", 400);
             }
     
@@ -205,7 +211,7 @@ class Declaracao extends CI_Controller {
                 throw new Exception("Tamanho do arquivo excede o limite de 5MB.", 400);
             }
     
-            // Prepare upload directory
+            // Configuração do diretório de upload
             $uploadPath = '/var/www/html/Declaracao/';
             if (!is_dir($uploadPath)) {
                 if (!mkdir($uploadPath, 0755, true)) {
@@ -213,75 +219,97 @@ class Declaracao extends CI_Controller {
                 }
             }
     
-            // Generate unique filename
-            $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $fileName = uniqid('decl_') . '_' . md5($file['name']) . '.' . strtolower($fileExtension);
+            // Gera nome único para o arquivo
+            $fileExtension = $allowedMimeTypes[$mimeType];
+            $fileName = 'decl_' . $matricula_id . '_' . time() . '.' . $fileExtension;
             $filePath = $uploadPath . $fileName;
     
-            // Move uploaded file
+            // Move o arquivo para o diretório
             if (!move_uploaded_file($file['tmp_name'], $filePath)) {
                 throw new Exception("Falha ao salvar o arquivo.", 500);
             }
     
-            // Set file permissions
+            // Define permissões
             chmod($filePath, 0644);
     
-            // Prepare database data
+            // Prepara dados para o banco
             $data = [
                 'anexo_comprovante' => $fileName,
-                'aprovado' => 0, // Default: not approved
+                'aprovado' => 0, // Não aprovado inicialmente
                 'data_cadastro' => date('Y-m-d H:i:s'),
                 'inicio_periodo' => date('Y-m-d', strtotime($inicioPeriodo)),
                 'final_periodo' => date('Y-m-d', strtotime($finalPeriodo)),
                 'aluno_id' => $aluno_id,
                 'curso_id' => $curso_id,
                 'matricula_id' => $matricula_id,
-                'status' => 1, // Active status
-                'valor' => 50.00 // Fixed declaration fee
+                'status' => 1, // Status ativo
+                'valor' => 50.00 // Valor da declaração
             ];
     
-            // Database transaction
-            $this->db->trans_start();
-            $insertResult = $this->db->insert('declaracoes', $data);
-            $declaracao_id = $this->db->insert_id();
-            $this->db->trans_complete();
+            // Verifica se já existe declaração para esta matrícula
+            $existing = $this->db->get_where('declaracao_matricula', [
+                'matricula_id' => $matricula_id
+            ])->row();
     
-            if (!$insertResult || $this->db->trans_status() === false) {
-                // Clean up uploaded file if DB fails
+            if ($existing) {
+                // Remove arquivo antigo se existir
+                if (!empty($existing->anexo_comprovante)) {
+                    $oldFilePath = $uploadPath . $existing->anexo_comprovante;
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+                
+                // Atualiza registro existente
+                $this->db->where('id', $existing->id);
+                $result = $this->db->update('declaracao_matricula', $data);
+                $declaracao_id = $existing->id;
+            } else {
+                // Cria novo registro
+                $result = $this->db->insert('declaracao_matricula', $data);
+                $declaracao_id = $this->db->insert_id();
+            }
+    
+            if (!$result) {
+                // Remove arquivo em caso de falha no banco
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
-                throw new Exception("Falha ao registrar no banco de dados.", 500);
+                throw new Exception("Falha ao registrar no banco de dados: " . $this->db->error()['message'], 500);
             }
     
-            // Success response
-            $this->load->view('declaracao_sucesso', [
+            // Resposta de sucesso
+            $response = [
+                'success' => true,
+                'message' => 'Declaração registrada com sucesso!',
                 'protocolo' => $declaracao_id,
-                'data_solicitacao' => $data['data_cadastro']
-            ]);
+                'arquivo' => $fileName
+            ];
+    
+            if ($this->input->is_ajax_request()) {
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($response));
+            } else {
+                $this->load->view('declaracao_sucesso', $response);
+            }
     
         } catch (Exception $e) {
-            // Error handling
-            $statusCode = $e->getCode() ?: 500;
-            http_response_code($statusCode);
-            
-            if ($statusCode >= 500) {
-                log_message('error', 'Erro em declaracao/gravar: ' . $e->getMessage());
-            }
+            // Tratamento de erro
+            $errorCode = $e->getCode() ?: 500;
+            log_message('error', 'Erro em declaracao/gravar: ' . $e->getMessage());
     
-            // For AJAX requests
             if ($this->input->is_ajax_request()) {
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                    'code' => $statusCode
-                ]);
+                $this->output
+                    ->set_status_header($errorCode)
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode([
+                        'error' => $e->getMessage()
+                    ]));
             } else {
-                // For regular form submissions
                 $this->load->view('declaracao_erro', [
                     'mensagem' => $e->getMessage(),
-                    'codigo' => $statusCode
+                    'codigo' => $errorCode
                 ]);
             }
         }
