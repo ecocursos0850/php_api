@@ -15,63 +15,59 @@ class Declaracao extends CI_Controller {
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
-    public function index($hash = null) {
-        try {
-            // Chave deve ser a mesma usada no Angular
-            $secretKey = 'Ec0Curs0s@2023!Decl';
-            
-            // Decodifica o hash
-            $encrypted = urldecode($hash);
-            
-            // Remove padding se necessário
-            $encrypted = str_replace(' ', '+', $encrypted);
-            
-            // Decriptografa
-            $decrypted = openssl_decrypt(
-                $encrypted,
-                'AES-256-CBC',
-                $secretKey,
-                0,
-                substr(hash('sha256', $secretKey), 0, 16)
-            );
-            
-            if ($decrypted === false) {
-                throw new Exception("Token inválido");
-            }
-            
-            $data = json_decode($decrypted);
-            
-            // Verifica se o token expirou (5 minutos de validade)
-            if (time() - $data->timestamp > 300) {
-                throw new Exception("Token expirado");
-            }
-            
-            $matricula_id = (int)$data->id;
-            
-            if ($matricula_id <= 0) {
-                throw new Exception("ID de matrícula inválido");
-            }
-    
-            // Restante da lógica original...
-            $this->db->select('matricula.*, aluno.*, curso.titulo as curso_titulo, curso.carga_horaria');
-            $this->db->from('matricula');
-            $this->db->join('aluno', 'aluno.id = matricula.aluno_id');
-            $this->db->join('curso', 'curso.id = matricula.curso_id');
-            $this->db->where('matricula.id', $matricula_id);
-            $query = $this->db->get();
-            
-            if($query->num_rows() == 0) {
-                throw new Exception("Matrícula não encontrada");
-            }
-            
-            $data['matricula_info'] = $query->row();
-            $this->load->view("declaracao", $data);
-            
-        } catch(Exception $e) {
-            log_message('error', 'Erro na declaração: ' . $e->getMessage());
-            show_error($e->getMessage(), 403, 'Acesso não autorizado');
+public function index($hash = null) {
+    try {
+        if (empty($hash)) {
+            throw new Exception("Parâmetro ausente.");
         }
+
+        // Decodifica o hash da URL
+        $base64 = urldecode($hash);
+
+        // Decodifica de base64 para JSON string
+        $jsonString = base64_decode($base64, true);
+        if ($jsonString === false) {
+            throw new Exception("Falha ao decodificar base64.");
+        }
+
+        // Converte JSON string em objeto PHP
+        $data = json_decode($jsonString);
+        if (!isset($data->id) || !isset($data->timestamp)) {
+            throw new Exception("Dados inválidos ou incompletos.");
+        }
+
+        // Verifica validade do token (5 minutos)
+        $agora = round(microtime(true) * 1000); // milissegundos
+        if ($agora - $data->timestamp > 5 * 60 * 1000) {
+            throw new Exception("Token expirado.");
+        }
+
+        $matricula_id = (int)$data->id;
+        if ($matricula_id <= 0) {
+            throw new Exception("ID de matrícula inválido.");
+        }
+
+        // Consulta a matrícula
+        $this->db->select('matricula.*, aluno.*, curso.titulo as curso_titulo, curso.carga_horaria');
+        $this->db->from('matricula');
+        $this->db->join('aluno', 'aluno.id = matricula.aluno_id');
+        $this->db->join('curso', 'curso.id = matricula.curso_id');
+        $this->db->where('matricula.id', $matricula_id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() === 0) {
+            throw new Exception("Matrícula não encontrada.");
+        }
+
+        $dados['matricula_info'] = $query->row();
+        $this->load->view("declaracao", $dados);
+
+    } catch (Exception $e) {
+        log_message('error', 'Erro na declaração: ' . $e->getMessage());
+        show_error($e->getMessage(), 403, 'Acesso não autorizado');
     }
+}
+
 
     public function salvar()
     {
