@@ -40,7 +40,7 @@
 
               <div class="row">
                   <div class="col-md-12 mb-3">
-                      <label for="cpf">CPF do Aluno (Obrigatório)</label>
+                      <label for="cpf">CPF do Aluno</label>
                       <input type="text" class="form-control" id="cpf" name="cpf" 
                             value="<?php echo $matricula_info->cpf; ?>" 
                             placeholder="Por favor, informe o CPF sem traço e pontos." 
