@@ -156,7 +156,9 @@ class Declaracao extends CI_Controller {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
-    
+        print_r($_POST, true);
+        die();
+        
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception("Método não permitido", 405);
