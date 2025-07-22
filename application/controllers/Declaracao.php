@@ -117,6 +117,8 @@ class Declaracao extends CI_Controller {
                 'id' => $result["id"]
             ]));
     }
+
+    
     public function gravar()
     {
         // Verifica se é um método POST

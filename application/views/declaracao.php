@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,6 +13,32 @@
 
     <!-- Custom styles for this template -->
     <link href="../assets/css/form-validation.css" rel="stylesheet">
+    
+    <style>
+      .file-preview {
+        margin-top: 10px;
+        display: none;
+      }
+      .file-preview img {
+        max-width: 200px;
+        max-height: 200px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+      }
+      .pdf-preview {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 10px;
+        display: none;
+      }
+      .pdf-icon {
+        color: #d63031;
+        font-size: 24px;
+        margin-right: 10px;
+      }
+    </style>
   </head>
 
   <body class="bg-light">
@@ -81,12 +106,23 @@
               </div>
 
               <div class="mb-3">
-                  <label for="file">Anexar Comprovante no formato PDF (Obrigatório)</label>
+                  <label for="file">Anexar Comprovante no formato PDF ou imagem (Obrigatório)</label>
                   <div class="input-group">
-                      <input type="file" class="form-control" id="file" name="file" required>
+                      <input type="file" class="form-control" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
                       <div class="invalid-feedback" style="width: 100%;">
                           Campo obrigatório.
                       </div>
+                  </div>
+                  
+                  <!-- Preview de Imagem -->
+                  <div class="file-preview" id="imagePreview">
+                      <img id="previewImage" src="#" alt="Preview da imagem" class="img-thumbnail">
+                  </div>
+                  
+                  <!-- Identificação de PDF -->
+                  <div class="pdf-preview" id="pdfPreview">
+                      <span class="pdf-icon">📄</span>
+                      <span id="pdfFileName">Arquivo PDF selecionado</span>
                   </div>
               </div>
               
@@ -105,68 +141,59 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-    <!-- Seu código JavaScript -->
+    
     <script>
-        /*$(document).ready(function() {
-            $('#matricula').on('change', function() {
-                // Obtém o <option> selecionado
-                var selectedOption = $(this).find('option:selected');
-
-                // Define os valores nos campos ocultos
-                $('#aluno_id').val(selectedOption.data('aluno-id'));
-                $('#curso_id').val(selectedOption.data('curso-id'));
-                $('#matricula_id').val(selectedOption.val());
-            });
-
-            // Escuta o evento de digitação no campo CPF
-            $('#cpf').on('input', function() {
-                var cpf = $(this).val().replace(/\D/g, ''); // Remove qualquer caractere não numérico
-                if (cpf.length === 11) { // Verifica se o CPF tem 11 dígitos
-                    // Executa a busca das matrículas do aluno e atualiza a lista de cursos
-                    buscarCursos(cpf);
-                }
-            });
-
-            function buscarCursos(cpf) {
-                // A partir do CPF capturado, você pode fazer uma chamada AJAX para o servidor
-                $.ajax({
-                    url: "https://srv448021.hstgr.cloud/php_api/alunos/get_matriculas_por_cpf/" + cpf,
-                    method: 'GET',
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (Array.isArray(response) && response.length > 0) {
-                            $(".bloco-matriculas").removeAttr("style","display: none");
-                            // Limpa a lista de cursos anterior
-                            $('#lista-cursos').empty();
-                            // Adiciona os cursos ao HTML
-                            response.forEach(function(curso) {
-                                var optionHtml = `
-                                    <option value="${curso.matricula_id}" data-aluno-id="${curso.aluno_id}" data-curso-id="${curso.curso_id}">
-                                        ${curso.titulo}
-                                    </option>
-                                `;
-                                $('#matricula').append(optionHtml);
-                            });
-
-                            // Seleciona a primeira opção e dispara o evento change
-                            if (response.length > 0) {
-                                $('#matricula').val(response[0].matricula_id).change();
-                            }
-                        }else{
-                            $(".bloco-matriculas").attr("style","display: none");
-                        }
-                    },
-                    error: function() {
-                        $(".bloco-matriculas").attr("style", "display: none");
-                        alert('Erro ao buscar cursos.');
-                    }
-                });
-            }
-        });*/
-
+      $(document).ready(function() {
+          // Função para exibir preview do arquivo selecionado
+          $('#file').change(function() {
+              var file = this.files[0];
+              var fileType = file.type;
+              var fileName = file.name;
+              
+              // Esconde ambos os previews primeiro
+              $('#imagePreview').hide();
+              $('#pdfPreview').hide();
+              
+              // Verifica se é uma imagem
+              if (fileType.match('image.*')) {
+                  var reader = new FileReader();
+                  
+                  reader.onload = function(e) {
+                      $('#previewImage').attr('src', e.target.result);
+                      $('#imagePreview').show();
+                  }
+                  
+                  reader.readAsDataURL(file);
+              } 
+              // Verifica se é PDF
+              else if (fileName.toLowerCase().endsWith('.pdf')) {
+                  $('#pdfFileName').text(fileName);
+                  $('#pdfPreview').show();
+              }
+          });
+          
+          // Validação do formulário
+          $('form').submit(function(e) {
+              var fileInput = $('#file')[0];
+              if (fileInput.files.length === 0) {
+                  e.preventDefault();
+                  alert('Por favor, selecione um arquivo para upload.');
+                  return false;
+              }
+              
+              var file = fileInput.files[0];
+              var validExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+              var fileExtension = file.name.split('.').pop().toLowerCase();
+              
+              if ($.inArray(fileExtension, validExtensions) === -1) {
+                  e.preventDefault();
+                  alert('Por favor, selecione um arquivo PDF ou imagem (JPG, JPEG, PNG).');
+                  return false;
+              }
+              
+              return true;
+          });
+      });
     </script>
   </body>
 </html>
