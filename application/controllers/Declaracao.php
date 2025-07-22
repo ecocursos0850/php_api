@@ -153,52 +153,45 @@ class Declaracao extends CI_Controller {
     }
     
     public function gravar() {
-        // Configura headers CORS
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: POST');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        
+    
         try {
-            // Verifica se é POST
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception("Método não permitido", 405);
             }
     
-            // Recebe e sanitiza os dados
             $inicioPeriodo = $this->input->post('inicioPeriodo', true);
             $finalPeriodo = $this->input->post('finalPeriodo', true);
             $aluno_id = (int)$this->input->post('aluno_id', true);
             $curso_id = (int)$this->input->post('curso_id', true);
             $matricula_id = (int)$this->input->post('matricula_id', true);
     
-            // Validação dos campos obrigatórios
             $errors = [];
             if (empty($inicioPeriodo)) $errors[] = 'Data de início é obrigatória';
             if (empty($finalPeriodo)) $errors[] = 'Data final é obrigatória';
             if ($aluno_id <= 0) $errors[] = 'ID do aluno inválido';
             if ($curso_id <= 0) $errors[] = 'ID do curso inválido';
             if ($matricula_id <= 0) $errors[] = 'ID da matrícula inválido';
-            
+    
             if (!empty($errors)) {
                 throw new Exception(implode("\n", $errors), 400);
             }
     
-            // Validação do arquivo
             if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
                 throw new Exception("Erro no envio do arquivo. Código: " . ($_FILES['file']['error'] ?? 'N/A'), 400);
             }
     
             $file = $_FILES['file'];
-    
-            // Verificação do tipo e tamanho do arquivo
             $allowedMimeTypes = [
                 'application/pdf' => 'pdf',
                 'image/jpeg' => 'jpg',
                 'image/jpg' => 'jpg',
                 'image/png' => 'png'
             ];
-            
-            $maxSize = 5 * 1024 * 1024; // 5MB
+    
+            $maxSize = 5 * 1024 * 1024;
             $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
             $mimeType = finfo_file($fileInfo, $file['tmp_name']);
             finfo_close($fileInfo);
@@ -211,7 +204,6 @@ class Declaracao extends CI_Controller {
                 throw new Exception("Tamanho do arquivo excede o limite de 5MB.", 400);
             }
     
-            // Configuração do diretório de upload
             $uploadPath = '/var/www/html/Declaracao/';
             if (!is_dir($uploadPath)) {
                 if (!mkdir($uploadPath, 0755, true)) {
@@ -219,66 +211,58 @@ class Declaracao extends CI_Controller {
                 }
             }
     
-            // Gera nome único para o arquivo
             $fileExtension = $allowedMimeTypes[$mimeType];
             $fileName = 'decl_' . $matricula_id . '_' . time() . '.' . $fileExtension;
             $filePath = $uploadPath . $fileName;
     
-            // Move o arquivo para o diretório
             if (!move_uploaded_file($file['tmp_name'], $filePath)) {
                 throw new Exception("Falha ao salvar o arquivo.", 500);
             }
     
-            // Define permissões
             chmod($filePath, 0644);
     
-            // Prepara dados para o banco
             $data = [
                 'anexo_comprovante' => $fileName,
-                'aprovado' => 0, // Não aprovado inicialmente
-                'data_cadastro' => date('Y-m-d H:i:s'),
+                'aprovado' => (int)false,
+                'data_cadastro' => date('Y-m-d'),
                 'inicio_periodo' => date('Y-m-d', strtotime($inicioPeriodo)),
                 'final_periodo' => date('Y-m-d', strtotime($finalPeriodo)),
                 'aluno_id' => $aluno_id,
                 'curso_id' => $curso_id,
                 'matricula_id' => $matricula_id,
-                'status' => 1, // Status ativo
-                'valor' => 50.00 // Valor da declaração
+                'status' => 1,
+                'valor' => 50.00
             ];
     
-            // Verifica se já existe declaração para esta matrícula
             $existing = $this->db->get_where('declaracao_matricula', [
+                'aluno_id' => $aluno_id,
+                'curso_id' => $curso_id,
                 'matricula_id' => $matricula_id
             ])->row();
     
             if ($existing) {
-                // Remove arquivo antigo se existir
                 if (!empty($existing->anexo_comprovante)) {
                     $oldFilePath = $uploadPath . $existing->anexo_comprovante;
                     if (file_exists($oldFilePath)) {
                         unlink($oldFilePath);
                     }
                 }
-                
-                // Atualiza registro existente
+    
                 $this->db->where('id', $existing->id);
                 $result = $this->db->update('declaracao_matricula', $data);
                 $declaracao_id = $existing->id;
             } else {
-                // Cria novo registro
                 $result = $this->db->insert('declaracao_matricula', $data);
                 $declaracao_id = $this->db->insert_id();
             }
     
             if (!$result) {
-                // Remove arquivo em caso de falha no banco
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
                 throw new Exception("Falha ao registrar no banco de dados: " . $this->db->error()['message'], 500);
             }
     
-            // Resposta de sucesso
             $response = [
                 'success' => true,
                 'message' => 'Declaração registrada com sucesso!',
@@ -295,7 +279,6 @@ class Declaracao extends CI_Controller {
             }
     
         } catch (Exception $e) {
-            // Tratamento de erro
             $errorCode = $e->getCode() ?: 500;
             log_message('error', 'Erro em declaracao/gravar: ' . $e->getMessage());
     
@@ -314,5 +297,6 @@ class Declaracao extends CI_Controller {
             }
         }
     }
+    
     
 }
