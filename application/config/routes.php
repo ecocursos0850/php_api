@@ -50,6 +50,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'email';
+$route['declaracao/gravar'] = 'declaracao/gravar';
+$route['declaracao/salvar'] = 'declaracao/salvar'; // também proteger o salvar
 $route['declaracao/(:any)'] = 'declaracao/index/$1';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
