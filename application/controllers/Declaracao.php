@@ -162,6 +162,9 @@ class Declaracao extends CI_Controller {
                 throw new Exception("Método não permitido", 405);
             }
     
+            log_message('error', 'POST: ' . print_r($_POST, true));
+            log_message('error', 'FILES: ' . print_r($_FILES, true));
+
             $inicioPeriodo = $this->input->post('inicioPeriodo', true);
             $finalPeriodo = $this->input->post('finalPeriodo', true);
             $aluno_id = (int)$this->input->post('aluno_id', true);
