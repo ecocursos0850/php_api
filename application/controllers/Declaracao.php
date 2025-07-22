@@ -8,15 +8,32 @@ class Declaracao extends CI_Controller {
         parent::__construct();
         $this->load->helper('file');
         $this->load->model("Declaracao_model");
+        $this->load->model("Matricula_model");
         // Defina os cabeçalhos CORS
         header('Access-Control-Allow-Origin: *');
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
-    public function index(){
-        $this->load->view("declaracao");
+    public function index($matricula = null){
+        // Busca a matrícula e relacionamentos
+        $this->db->select('matricula.*, aluno.*, curso.titulo as curso_titulo, curso.carga_horaria');
+        $this->db->from('matricula');
+        $this->db->join('aluno', 'aluno.id = matricula.aluno_id');
+        $this->db->join('curso', 'curso.id = matricula.curso_id');
+        $this->db->where('matricula.id', $matricula);
+        $query = $this->db->get();
+        
+        $data['matricula_info'] = $query->row();
+        
+        if(empty($data['matricula_info'])) {
+            show_404();
+            return;
+        }
+        
+        $this->load->view("declaracao", $data);
     }
+
     public function salvar()
     {
         // Verifica se é um método POST
