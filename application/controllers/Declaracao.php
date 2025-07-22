@@ -226,7 +226,6 @@ class Declaracao extends CI_Controller {
     
             $data = [
                 'anexo_comprovante' => $fileName,
-                'aprovado' => (int)false,
                 'data_cadastro' => date('Y-m-d'),
                 'inicio_periodo' => date('Y-m-d', strtotime($inicioPeriodo)),
                 'final_periodo' => date('Y-m-d', strtotime($finalPeriodo)),
