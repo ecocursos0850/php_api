@@ -10,10 +10,10 @@
     <title>ECOCURSOS - Solicitação de Declaração</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
+    <link href="../assets/css/form-validation.css" rel="stylesheet">
   </head>
 
   <body class="bg-light">
