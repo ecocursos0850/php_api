@@ -60,7 +60,7 @@
           </div>
           <form class="card p-2" action="https://srv448021.hstgr.cloud/php_api/declaracao/gravar" method="POST" enctype="multipart/form-data">
               <input type="hidden" id="aluno_id" name="aluno_id" value="<?php echo $matricula_info->aluno_id; ?>">
-              <input type="hidden" id="matricula_id" name="matricula_id" value="<?php echo $matricula_info->id; ?>">
+              <input type="hidden" id="matricula_id" name="matricula_id" value="<?php echo $matricula_info->matricula_id; ?>">
               <input type="hidden" id="curso_id" name="curso_id" value="<?php echo $matricula_info->curso_id; ?>">
 
               <div class="row">
