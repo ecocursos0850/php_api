@@ -48,7 +48,7 @@ class Declaracao extends CI_Controller {
             }
 
             // Consulta a matrícula
-            $this->db->select('matricula.*, aluno.*, curso.titulo as curso_titulo, curso.carga_horaria');
+            $this->db->select('matricula.id as matricula_id, aluno.id as aluno_id, aluno.nome, aluno.cpf, curso.id as curso_id, curso.titulo as curso_titulo, curso.carga_horaria');
             $this->db->from('matricula');
             $this->db->join('aluno', 'aluno.id = matricula.aluno_id');
             $this->db->join('curso', 'curso.id = matricula.curso_id');
