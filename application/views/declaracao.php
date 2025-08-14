@@ -46,7 +46,7 @@
     <div class="container">
       <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="https://www.ecocursos.com.br/assets/images/Logo1.png" width="262.5" height="77.47">
-        <h2>Solicitação de Declaração</h2>
+        <h2>Solicitar declaração para Licença Capacitação</h2>
       </div>
 
       <div class="row">
