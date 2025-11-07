@@ -243,5 +243,6 @@ Distribuído sob a licença **MIT**.
 ---
 
 <p align="center">
-Desenvolvido com ❤️ utilizando <a href="https://laravel.com" target="_blank">Laravel</a>
+Desenvolvido com ❤️ utilizando <a href="https://laravel.com" target="_blank">Laravel</a><br>
+	por José Ângelo Lefundes Coelho
 </p>
