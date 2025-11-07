@@ -69,7 +69,7 @@ docker-compose exec app php artisan db:seed
 ### 7️⃣ Verificar se a aplicação está rodando
 
 ```bash
-curl http://localhost:8000/api/contratos
+GET http://localhost:8000/api/contratos
 ```
 
 ---
@@ -113,7 +113,7 @@ O projeto utiliza as seguintes tabelas:
 
 ---
 
-### 2️⃣ Agrupamento por Banco e Verba (Eloquent)
+### 2️⃣ Agrupamento por Banco e Verba (Usando Eloquent)
 
 **GET** `/api/contratos/agrupamento`
 
@@ -134,7 +134,7 @@ O projeto utiliza as seguintes tabelas:
 
 ---
 
-### 3️⃣ Agrupamento por Banco e Verba (SQL Bruto)
+### 3️⃣ Agrupamento por Banco e Verba (Usando propositalmente SQL Bruto para a prática)
 
 **GET** `/api/contratos/agrupamento-sql`
 
@@ -245,9 +245,3 @@ Distribuído sob a licença **MIT**.
 <p align="center">
 Desenvolvido com ❤️ utilizando <a href="https://laravel.com" target="_blank">Laravel</a>
 </p>
-```
-
----
-
-Deseja que eu adicione também **badges personalizadas** (ex: Docker, PHP, PostgreSQL, Laravel) e um **sumário (Table of Contents)** clicável no topo (para navegação no GitHub)?
-Posso gerar essa versão aprimorada do README também.
